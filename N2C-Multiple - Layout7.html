@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<title>SVG Canvas</title>
+
+<link rel="stylesheet" type="text/css" href='visualizer5.css' />
+
+
+<script type='text/javascript' src='d3.v2.min.js'></script>
+<script type="text/javascript" src='html5slider.js'></script>
+<script type='text/javascript' src='visualizer10.js'></script>
+
+
+<body>
+	<div id="externalwrapper">
+		<div id="holdElements">
+			<div id="header" style="font-size:20px; font-family:arial; font-weight:700">N2C - Network2Canvas</div>
+			<div id="selectionDisplay1">
+				<div id="SD1"><span id="SD1">Node Information from GMT</span><title>Click a spot on the canvas to view Node Information</title></div>
+				
+				<div id="nodeInformation">
+					<div class="displayTitle">Node Name:</div>
+					<div id="nodeName" style="padding-top:10px;padding-bottom:10px;"></div>
+				</div>
+			
+				<div id="infoContainer">
+					<div class="displayTitle">Additional Information:</div><br />
+					<div id="additionalInfo"></div>
+				</div>
+			</div>
+
+
+
+
+			<div id="sidePanel">
+				<div id="menu">
+					<span class="tab" id="tab1" onclick="displayTab(1)">Analysis</span>
+					<span class="tab" id="tab2" onclick="displayTab(2)">Canvas Options</span>
+				</div>	
+				<form id="form1"><br />
+					<p><b>Gene List Enrichment Analysis</b></p>
+					Choose Color to Highlight Nodes:
+					<br /><br />
+						<div id="hexcode_gene">
+						</div>
+						<br />
+					
+					Gene List:<br /><br />
+
+							<div class="center">
+								<textarea id="genes" onfocus="clearTextArea(this.form.genes)" name="genes">Enter list of gene names here</textarea>
+							</div>
+							<div class="center">
+								<input type ="button" name="button" value="Submit" onClick="geneFill(G_VAR.nodes, this.form.genes.value, G_VAR.indicatorColor, G_VAR.infoDict, G_VAR.primes, G_VAR.listNumber, G_VAR.infos);"/>
+								<input type="button" name="button" value="Clear" onclick="indicateClear(G_VAR.nodes);"/><br />
+								<input type="button" name="button" value="Example" onclick="exampleRandom(G_VAR.infoArray, 20);" />
+							</div>
+
+				</form>
+				<form id="form2">
+					<br />
+					<br />
+
+
+					<span class="canvasOptions">Center Canvas:</span>
+				<div class="right">
+					<button type="button" onclick="centerCanvas(G_VAR.nodes, G_VAR.pixels, G_VAR.textColor, G_VAR.textSize, G_VAR.width)">Center</button></div>
+				<br />
+				<br />
+	
+
+				<span class="canvasOptions">Choose Canvas Color:</span> <div class="right"><br />
+
+				<div id="wheelContain"></div>
+				</div>
+				<br />	
+				<br />
+				<br />
+
+				<span class="canvasOptions">Color Scale: </span><em id="colorScale">1	</em>
+				<div class="right">
+					<input type="range" min="0" max="1" value="1" step=".001" name="scale" id="range_colorScale" onMouseup="scaleColor(G_VAR.nodes, G_VAR.avgWeight, this.form.scale.value, G_VAR.canvasRGB, G_VAR.pixels, G_VAR.textColor, G_VAR.textSize);" onchange="seeScale(this.form.scale.value)"></input><br />
+					<input type="button" name="button" value="Reset Scale" onclick="resetColorScale(G_VAR.nodes, G_VAR.canvasRGB, G_VAR.pixels, G_VAR.textColor, G_VAR.textSize);"/>
+				</div><br />
+				<br />
+
+
+				</form>
+				<br />
+				<br />
+				<hr />
+				<div id="findNode">
+					<form id="form3">
+					<p><b style="padding-right:5px">Find Node(s): </b><br /><br />
+							<textarea id="nodes" names="nodes" cols="10" rows="3" onfocus="clearTextArea(this.form.nodes)"onBlur="fill(G_VAR.nodes, this.form.nodes.value, '#F00', G_VAR.infoDict, G_VAR.primes, G_VAR.listNumber);">Insert Node List (e.g.,          CDK1            CDK2            CDK3)</textarea>
+						</p>
+					</form>
+				</div>
+				<hr />
+				<br />
+				<a href="#" id="download" onclick="downloadLink()">Download Canvas in SVG<br/>(Pathway to Adobe Illustrator)</a>
+
+				<br />
+				
+				</div> 
+
+
+			<div id="holdSVG">
+
+				<div id="svgWrapper">
+
+					<form id="selectSVG">
+						<select name="selectSVG" onChange="getJSON(this.form.selectSVG.selectedIndex, G_VAR.canvasRGB, G_VAR.canvasHex, G_VAR.indicatorColor);">
+							<option value="0">Direct Kinase-Kinase Interactions</option>
+							<option value="1">Kinase-Kinase Interactions by Similar Substrates</option>
+							<option value="2">Direct TF-TF Interactions</option>
+							<option value="3">TF-TF Interactions by Similar Substrate</option>
+
+							<option value="4">Biocarta Pathways</option>
+							<option value="5">GeneOntology Biological Processes</option>
+							<option value="6">GeneOntology Cellular Components</option>
+							<option value="7">GeneOntology Molecular Function</option>
+							<option value="8">KEGG Pathways</option>
+
+
+							<option value="9">MGI - Mammalian Phenotype</option>
+							<option value="10">MicroRNA</option>
+							<option value="11">OMIM</option>
+							<option value="12">Pfam</option>
+							<option value="13">Reactome Pathways</option>
+							<option value="14">WikiPathways</option>
+
+
+							
+							</select>
+						</form>
+
+				<div id="svgContainer"></div>
+				<div id="chartContainer"></div>
+				
+				</div>
+
+
+				
+			</div>
+			<div id="selectionDisplay4" class="GSEA"></div>
+
+
+			<div id="manhattanElement">
+				<div id="selectionDisplay3"></div>
+			</div>
+
+			</div>
+		</div>
+		<div id="footer">
+			(c) 2012 <a href="http://www.mssm.edu/labs/maayan">Ma'ayan Laboratory</a> - <a href="http://www.mssm.edu">Mount Sinai School of Medicine</a>
+		</div>
+	
+
+
+	</div>
+
+
+</body>
+
+
+<script type="text/javascript">
+
+	getJSON(0, [0, 255, 255], "#00FFFF", "#FFFFFF");
+
+	storeFact = [0,0]
+	colorWheel(10, "div#wheelContain", "G_VAR.canvasRGB", "#00FFFF")
+	colorWheel(10, "div#hexcode_gene", "G_VAR.indicatorColor", "#FFFFFF")
+
+
+	d3.select("#holdSVG").append("div").attr("id","infoReminder").style("width", "390px").style("padding-top", "15px").text("Click a spot on the canvas to view more information about the node.")
+
+
+</script>
+
+</html>

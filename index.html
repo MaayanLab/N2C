@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Network2Canvas - connecting library terms using shared attributes and visualizing them on a 2-D SVG Canvas." />
+	<meta name="keywords" content="Avi Ma'ayan maayan laboratory mount sinai school of medicine new york mssm network2canvas n2c network 2 canvas" />
+    <meta name="author" content="Christopher Tan" />
+	<title>Network2Canvas</title>
+
+	<link rel="stylesheet" type="text/css" href='visualizer5.css' />
+
+
+	<script type='text/javascript' src='d3.v2.min.js'></script>
+	<script type="text/javascript" src='html5slider.js'></script>
+	<script type='text/javascript' src='visualizer20.js'></script>
+</head>
+
+<body>
+	<div id="externalwrapper">
+		<div id="holdElements">
+		
+		
+			<div id="topbar">
+				<a class="linker" href="http://www.maayanlab.net/N2C/N2CvD2N"><span class= "linker" href ="http://www.maayanlab.net/N2C/N2CvD2N/">Drug-Drug Similarity Canvases</span></a>
+				<a class="linker" href="http://www.maayanlab.net/N2C/"><span class= "linker" style="font-weight:700">Functional Association Gene Canvases</span></a>
+				<a class="linker" href="http://www.maayanlab.net/N2C/Learn/" style="color:#DD5500;" ><span class="linker">Canvas Node-Learning Game</span></a>
+			</div>
+			
+			
+			<div id="header" style="font-size:20px; font-family:arial; font-weight:700">
+
+
+				Network2Canvas: Network Visualization on a Canvas with Enrichment Analysis
+
+
+			</div>
+			<div id="help"><a href="help.html">Help</a></div>
+
+			<div id="menu" class="outputMenu">
+					<span class="tab" id="outputTab1" onclick="displayOutput(1)">Info</span>
+					<span class="tab" id="outputTab2" onclick="displayOutput(2)" style="font-weight:400; background-color: #CCC;">Analysis Output</span>
+			</div>
+
+			<div id="outputDisplay1">
+				<div id="nodeInformation">
+					<div class="displayTitle">Term Name:</div>
+					<div id="nodeName" style="padding-top:5px;padding-bottom:10px;"></div>
+				</div>
+				
+				<span id="additTitle" style="font-size:11px">Additional Information:</span>
+				<div id="infoContainer">
+					<div id="additionalInfo"></div>
+				</div>
+				<div style="position:absolute; top:525px; text-align:center; width:191px">
+				<input type="button" onClick="document.getElementById('genes').value = document.getElementById('additionalInfo').innerHTML.split(', ').join('\n'); document.getElementById('genes').onfocus=''" value="Add to Input List" />
+				</div>
+			</div>
+		<div id="outputDisplay2" class="GSEA" style="display:none; border-bottom: 1px solid black;">
+
+			<div id="enrichmentResults">
+
+			</div>
+
+		</div>
+			<div id="sidePanel">
+				<div id="menu">
+					<span class="tab" id="tab1" onclick="displayTab(1)">Analysis</span>
+					<span class="tab" id="tab2" onclick="displayTab(2)" style="font-weight:400; background-color: #CCC;">Canvas Options</span>
+				</div>	
+				<form id="form1"><br />
+					<p><b>Gene List Enrichment Analysis</b></p>
+					Choose Color to Highlight Terms:
+					<br /><br />
+						<div id="hexcode_gene">
+						</div>
+						<br />
+					
+					Gene List:<br /><br />
+
+							<div class="center">
+								<textarea id="genes" onclick="clearTextArea(this.form.genes)" name="genes">Enter list of gene names here</textarea>
+							</div>
+							<div class="center">
+								<input id="submitButton" type ="button" name="button" value="Submit" selected="true"/>
+								<input id="clearButton" type="button" name="button" value="Clear"/><br />
+								<input id="exampleButton" type="button" name="button" value="Example"/>
+								<input id="enrichr" type="button" name="button" value="Send to Enrichr"/>
+
+							</div>
+
+				</form>
+				<form id="form2">
+					<br />
+					<br />
+
+
+					<span class="canvasOptions">Center Canvas:</span>
+				<div class="right">
+					<button type="button" onclick="centerCanvas(G_VAR.nodes, G_VAR.canvasSize)">Center</button></div>
+				<br />
+				<br />
+	
+
+				<span class="canvasOptions">Choose Canvas Color:</span> <div class="right"><br />
+
+				<div id="wheelContain"></div>
+				</div>
+				<br />	
+				<br />
+				<br />
+
+				<span class="canvasOptions">Color Scale: </span><em id="colorScale">1	</em>
+				<div class="right">
+					<input type="range" min="0" max="1" value="1" step=".001" name="scale" id="range_colorScale" onMouseup="scaleColor(G_VAR.nodes, G_VAR.avgWeight, this.form.scale.value, G_VAR.canvasRGB, G_VAR.canvasSize);" onChange="seeScale(this.form.scale.value);"></input><br />
+					<input type="button" name="button" value="Reset Scale" onclick="resetColorScale(G_VAR.nodes, G_VAR.canvasRGB, G_VAR.canvasSize);"/>
+				</div><br />
+				<br />
+
+
+				</form>
+				<br />
+				<br />
+				<div id="findNode" style="border-top: 1px solid black;">
+				
+				<div id="menu">
+					<b style="display:inline-block; padding-right:10px;">Find by:</b>
+					<span class="tab" id="tabFind1" onclick="displayFind(1)">Name</span>
+					<span class="tab" id="tabFind2" onclick="displayFind(2)" style="font-weight:400; background-color: #CCC;">Element</span>
+				</div>	
+					<form id="formFind1">
+					<p><b style="padding-right:5px">Find Terms by Name: </b><br /><br />
+							<textarea id="nodes" names="nodes" cols="10" rows="3" onfocus="clearTextArea(this.form.nodes)">Insert Term List (e.g.,          CDK1            CDK2            CDK3)</textarea>
+							
+							
+							<input type="button" onclick="fill(G_VAR.nodes, this.form.nodes.value, G_VAR.indicatorColor , G_VAR.width);" value="Find"/>
+						</p>
+					</form>
+					<form id="formFind2" style="display:none;">
+					<p><b style="padding-right:5px">Find Terms by Element(s): </b><br /><br />
+							<textarea id="nodes" names="nodes" cols="10" rows="3" onfocus="clearTextArea(this.form.nodes)">Insert Element List (e.g.,          CDK1            CDK2            CDK3)</textarea>
+							
+							<input type="button" onclick="fillElement(G_VAR.nodes, this.form.nodes.value, G_VAR.indicatorColor , G_VAR.width);" value="Find"/>
+							
+						</p>
+					</form>
+				</div>
+				<hr />
+				<br />
+				<a href="#" id="download" onclick="downloadLink();">Download Current View in SVG<br/>(Pathway to Adobe Illustrator)</a>
+
+				<br />
+				
+				</div> 
+
+
+			<div id="holdSVG">
+
+				<div id="svgWrapper">
+					<form id="selectSVG">
+
+						<select id="selectCanvas" onChange="getGMT(this.form.selectCanvas.selectedIndex);getJSON(this.form.selectCanvas.selectedIndex, G_VAR.canvasRGB, G_VAR.indicatorColor);">
+							<option value="x">------Transcription------</option>
+							<option value="x"></option>
+							<option value="3">Chip-X Enrichment Analysis (ChEA)</option>
+							<option value="24">JASPAR + Transfac PWM</option>
+							<option value="17">UCSC GenomeBrowser PWM</option>
+							<option value="37">Histone Modifications ChIP-seq</option>
+							<option value="10">Target Scan - MicroRNAs</option>
+							<option value="38">ENCODE Transcription Factors - ChIP-seq</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Pathways------</option>
+							<option value="x"></option>
+							<option value="8">KEGG Pathways</option>
+							<option value="14">WikiPathways</option>
+							<option value="13">Reactome Pathways</option>
+							<option value="4">Biocarta Pathways</option>
+							<option value="23">PPI Hub Proteins</option>
+							<option value="1">Kinase Enrichment Analysis (KEA)</option>
+							<option value="27">Human Endogenous Complex</option>
+							<option value="34">CORUM</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Ontologies------</option>
+							<option value="x"></option>
+							<option value="5">Gene Ontology Biological Processes</option>
+							<option value="6">Gene Ontology Cellular Components</option>
+							<option value="7">Gene Ontology Molecular Function</option>
+							<option value="9">MGI - Mammalian Phenotype - Top 4</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Disease/Drugs------</option>
+							<option value="x"></option>
+							<option value="32">Up-Regulated CMAP Top 100</option>
+							<option value="33">Down-Regulated CMAP Top 100</option>
+							<option value="31">GeneSigDB</option>
+							<option value="11">OMIM Diseases</option>
+							<option value="22">OMIM Expanded</option>
+							<option value="25">VirusMINT - Virus-Host Interactions</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Cell Types------</option>
+							<option value="x"></option>
+							<option value="26">Human Gene Atlas</option>
+							<option value="28">Mouse Gene Atlas</option>
+							<option value="29">Cancer Cell Line Encyclopedia</option>
+							<option value="30">NCI-60 Cancer Cell Line</option>
+							
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Misc------</option>
+							<option value="x"></option>
+							<option value="35">HMDB Metabolites</option>
+							<option value="12">PFAM Interpro - Protein Domains</option>
+							<option value="x"></option>
+							<option value="x"></option>
+						
+							<!--
+							<option value="x">------Yan------</option>
+							<option value="x"></option>
+							<option value="2">ChEA Direct</option>
+							<option value="39">ChEA 2</option>
+							-->
+							
+							
+							
+							
+							
+							
+							
+							
+							
+					
+
+
+							
+							</select>
+						</form>
+
+				<div id="svgContainer"></div>
+				<div id="chartContainer"></div>
+				<div id="pvalueContainer"></div>
+				<form id="choiceView" style="padding-top:10px">
+						<input type ="radio" id="mainCanvasSelector" name="a" checked="checked" onClick="selectAlternateView()">Main View</input>
+						<input type ="radio" id="networkView" name = "a" disabled="true" onClick="selectAlternateView()">Network View</input>
+						<input type ="radio" id="pvalueCanvas" name = "a" disabled="true" onClick="selectAlternateView()">P-Value View</input>
+				</form>
+
+
+
+				<div id="youtube">
+
+						<strong>Video Tutorials:</strong> <br />
+						<a href="http://youtu.be/N75lhV5lxIk"><img src="res/youtube-play-button.png"/ style="padding-right:10px">Generate canvases from your own networks</a><br />
+						<a href="http://youtu.be/R3eBQcRcOEY"><img src="res/youtube-play-button.png" style="padding-right:10px"/>Learn how to use the Network2Canvas web-site</a>
+
+				<hr />
+
+				<div id="citation">
+					Christopher M. Tan, Edward Y. Chen, Ruth Dannenfelser, Neil R. Clark and Avi Ma'ayan. <strong>Network2Canvas: Network Visualization on a Canvas with Enrichment Analysis.</strong> Bioinformatics (2013) PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23749960">2374996</a>
+				</div>
+
+				<hr />
+
+
+				<!-- AddThis Button BEGIN -->
+					<div style="padding-left:50px" class="addthis_toolbox addthis_default_style ">
+					<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+					<a class="addthis_button_tweet"></a>
+					<a class="addthis_button_pinterest_pinit"></a>
+					<a class="addthis_counter addthis_pill_style"></a>
+					</div>
+					<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+					<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51b9e9981af00c50"></script>
+				<!-- AddThis Button END -->
+				
+
+				</div>
+			</div>
+
+
+				
+			</div>
+
+
+
+			<div id="manhattanElement">
+				<div id="selectionDisplay3">
+
+				
+				</div>
+			</div>
+
+			</div>
+		</div>
+		<div id="footer">
+			<div class="inBlock logos">
+				<a href="http://www.mountsinai.org/"><img src="http://www.maayanlab.net/images/Mount_Sinai_hospital_logo.png" height="80" alt="MSSM logo" name="MSSMlogo" id="MSSMlogo"></a>
+			</div>
+
+			<div id="maayan" class="inBlock">(c) 2013 <a href="http://www.mssm.edu/labs/maayan">Ma'ayan Laboratory</a> - <a href="http://icahn.mssm.edu">Icahn School of Medicine at Mount Sinai</a></div>
+
+
+			<div id="SCBNYLogo" class="inBlock logos">
+				<a href="http://sbcny.org/"><img src="http://amp.pharm.mssm.edu/library/images/SBCNY.png" alt="SBCNY logo" name="SBCNYlogo" id="SBCNYlogo"></a>
+			</div>
+
+		</div>
+	
+
+
+</body>
+
+
+<script type="text/javascript">
+	
+
+	d3.select("#exampleButton").on("click", function(){
+		var genes 	= ["IL1B", "IKBKE", "CCL2", "TNIP1", "NFKB2", "ICAM1", "RELB",
+						"NFKBIA", "CXCL2", "CXCL3", "HBB", "HBB", "IL1B", "ZC3H12A",
+						"ETS1", "CXCL1", "TNFAIP3", "IL8", "ICAM1", "CCL20", "ICAM1",
+						"TNFAIP3", "LYN", "TRAF1", "ATP1B1", "NFKB2", "SLC2A6", "BCL2A1",
+						"IL1A", "NCK1", "TICAM1", "PAX8", "CEBPZ", "SOD2", "CSF2", "SOD2",
+						"EDN1", "BIRC3", "CXCL6", "CEBPD", "CDKN1A", "TNF", "FOSL1",
+						"IL6", "SOD2", "CFLAR", "BID", "TP53BP2", "TNFAIP6", "TRIB1",
+						"LYN", "PAX8", "MMP1", "IKBKE", "CFLAR", "PLAUR", "GADD45A",
+						"PLAUR", "RIPK2", "NFKB1", "IER3", "LYN", "EHD1", "MYC", "CDK6",
+						"CFB", "NCK1", "PTRH2", "PDZK1IP1", "RBKS", "IL4R", "LIF",
+						"SERPINB2", "G0S2", "CSF3", "TNFAIP6", "CLDN1", "ATP1B1",
+						"TNFRSF9", "CCL4", "MAFF", "LAMC2", "RIPK2", "APPBP2", "STK10",
+						"SAT1", "WTAP", "CD83", "IL32", "TNFAIP2", "SLC11A2", "SOD2",
+						"FAS", "SAT1", "DFFA", "CSF1", "SMAD3"];
+		d3.select("#genes").on("click", null).property("value", genes.join("\n"));
+
+	})
+
+	d3.select("#enrichr").on("click", function(){
+		enrich({"description" : "", "popup" : "false", "list" : d3.select("#genes").property("value")});
+	});
+
+
+	d3.select("#clearButton").on("click", function(){
+		indicateClear(G_VAR.nodes);
+		d3.select("#genes").property("value", "");
+	})
+
+
+	d3.select("#submitButton").on("click", function(){
+		 geneFill(G_VAR.nodes, this.form.genes.value, G_VAR.indicatorColor, G_VAR.infoDict, G_VAR.infos);
+	})
+
+	
+	colorWheel(10, "div#wheelContain", "G_VAR.canvasRGB", [0, 255, 255]);
+	colorWheel(10, "div#hexcode_gene", "G_VAR.indicatorColor", [255, 255, 255]);
+	document.getElementById("selectCanvas").selectedIndex = 12;
+	getGMT(12);
+	getJSON(12, [0, 255, 255], [255, 255, 255]);
+
+
+	storeFact = [0,0];
+
+
+
+	d3.select("#holdSVG").append("div")
+			.attr("id","infoReminder")
+			.style("width", "390px").style("padding-top", "5px")
+			.text("Click a spot on the canvas to view more information about the term.");
+
+
+</script>
+<script type="text/javascript">
+
+//Google analytics code
+
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-6277639-15']);
+  _gaq.push(['_trackPageview']);
+
+
+
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+
+
+
+</script>
+</html>

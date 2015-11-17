@@ -1,0 +1,89 @@
+<html>
+<title>SVG Canvas</title>
+
+<link rel="stylesheet" type="text/css" href='visualizerPMZ.css' />
+
+
+<script type='text/javascript' src='d3.v2.min.js'></script>
+<script type="text/javascript" src='html5slider.js'></script>
+<script type='text/javascript' src='visualizerPMZ.js'></script>
+<script type='text/javascript' src='PMZDATA.js'></script>
+<!--
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript" src="infos.js"></script>
+<script type="text/javascript" src="infos2.js"></script>-->
+
+
+
+<body>
+	<div id="externalwrapper">
+		<div id="holdElements">
+			<div id="header">
+				<span id="title"><b>Fish GO Enrichment Analysis</b></span>
+			</div>
+			<div id="sidePanel">
+				<form id="geneList">
+					<p><u><b>Gene Set Enrichment Analysis</b></u></p>
+					<br />
+					<b>Hex Color Code:</b>
+						<div class="center">
+							<textarea name="hexcode_gene" cols="8" rows="1" onBlur="sampler_gene(this.form.hexcode_gene.value);">#FFFFFF</textarea>
+							<em id="sample_gene" style="margin-right:auto;"></em>
+						</div>
+						<br />
+					
+					<b>Gene List:</b><br />
+					[<i>ex: 0001311-scn4ab</i>]<br /><br /> 
+
+							<div class="center">
+								<textarea id="genes" name="genes" cols="20" rows="5" >Enter list of gene names here</textarea>
+							</div><br />
+							<div class="center">
+								<input type ="button" name="button" value="Submit" onClick="geneFill(G_VAR.nodes, this.form.genes.value, this.form.hexcode_gene.value, G_VAR.infoDict, G_VAR.primes, G_VAR.listNumber);"/>
+								<input type="button" name="button" value="Clear" onclick="indicateClear(G_VAR.nodes);"/>
+								<input type="button" name="button" value="Example"
+								onclick="this.form.genes.value = ['0002098-Kcnh7', '0001509-vps26a', '0007608-ACOT9', '0010431-TNPO3', '0024075-Cacna2d3', '0014161-nphp3', '0007275-NPAS3', '0001975-NDST2', '0016442-STARD3NL', '0004914-Slit1', '0009104-tpmt', '0018830-gapvd1', '0016174-eif3h', '0017528-CTSD', '0014563-Rims2', '0017954-acbd6', '0013665-Ranbp9', '0005194-AKR1A1', '0018399-Lamb2', '0004525-RAB7L1', '0020688-hspb11', '0010287-CUZD1', '0016706-KCNK10', '0017134-GATA4', '0019765-KCNH1', '0021707-Daglb', '0018318-ESRRG', '0007993-ARHGEF17', '0020598-MUC2', '0006854-HLHm3'].join('\n')"
+							</div>
+				</form>
+			</div>
+
+			<div id="holdSVG">
+
+
+				<div id="svgContainer">
+					<form id="selectSVG">
+				</div>
+
+
+				<div id="selectionDisplay4" class="GSEA"></div>
+			</div>
+
+			
+		</div>
+	
+
+
+	</div>
+
+
+</body>
+
+
+<script type="text/javascript">
+	samplerCreate();
+
+	
+	var container = [];
+	
+	for (var svgIndex = 0; svgIndex < cDict.length; svgIndex++){
+		container[svgIndex] = initializeIt(cDict[svgIndex], infos[svgIndex]);
+	}
+
+	G_VAR = container[0];
+	visualizeIt(container[0]);
+	previousIndex = 0;
+
+
+</script>
+
+</html>

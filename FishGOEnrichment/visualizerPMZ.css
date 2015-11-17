@@ -1,0 +1,191 @@
+	body{
+		margin-left:0px;
+	}
+	div#externalwrapper{
+		width:1000px;
+		height:800px;
+		margin-left:200px;
+		margin-top:30px;
+		padding:0px;
+	}
+
+	div#holdElements{
+		width:800px;
+		height:800px;
+		border: 1px solid;
+	}
+
+	div#header{
+		width:800px;
+		height:100px;
+		background-color:#CCC;
+		border-bottom: 1px solid;
+	}
+
+	div#sidePanel{
+		padding-top:50px;
+		width:200px;
+		height:650px;
+		text-align:center;
+		font-size:13px;
+		border-right: 1px solid;
+	}
+
+	div#sidePanel textarea#genes{
+		width:150px;
+		height:200px;
+	}
+
+	div#holdSVG{
+		position:absolute;
+		top:130px;
+		left:400px;
+
+		width:600px;
+		height:500px;
+		vertical-align:middle;
+		text-align:center;
+
+	}
+
+	div#svgContainer{
+		width:65%;
+		padding-top:30px;
+		text-align:center;
+	}
+
+	svg#mainSVG{
+
+		vertical-align:middle;
+		border: 1px solid;
+
+	}
+
+	form#selectSVG{
+		padding-bottom:15px;
+		font-size:12px;
+	}
+
+	select{
+		text-align:center;
+	}
+	div#selectionDisplay4{
+		position:absolute;
+		left:420px;
+		top:25px;
+		width: 120px;
+		height:400px;
+		text-align:center;
+	}
+
+
+
+
+
+	svg#sample_gene, svg#sample {
+		width: 20px;
+		height: 20px;
+	}
+
+	table{
+		border: 1px solid black;
+	}
+
+	table.class{
+		width:100%;
+	}
+	table#nodeTable, table#nodeTable_gene{
+		float:left;
+	}
+
+	table#nodetable tr{ 
+		text-align:center;
+	}
+
+	table#nodetable_gene tr{ 
+		text-align:center;
+	}
+	table#geneTable, table#results_gene{
+		display:inline;
+	}
+
+	th { 
+		padding:5px;
+		padding-left:12px;
+		padding-right:12px;
+	}
+
+	td, tr{
+		padding-left: 10px;
+		padding-right: 10px;
+		font-size:11px;
+	}
+
+	td {
+		text-align:center;
+	}
+
+
+	td#col1{
+		width: 50%;
+		float:right;
+		vertical-align:top;
+	}
+
+	td#col2{
+		width: 0 %;
+		float:none;
+		vertical-align:top;
+	}
+
+
+	td#leftColumn, td#rightColumn{
+		width:150px;
+		float:left;
+		display:inline;
+		vertical-align:top;
+		padding-top:150px;
+	}
+
+	td#middleColumn{
+		display:inline;
+		vertical-align:baseline;
+	}
+
+	div#leftColumn, div#rightColumn{
+		width:50%;
+		text-align:center;
+		display:inline;
+	}
+	table#HTML{
+		width:100%;
+		border: none;
+		text-align:center;
+	}
+
+	table#HTML td{
+		text-align:center;
+		padding:none;
+	}
+	
+	svg.chart{
+		padding-top:20px;
+		padding-bottom:20px;
+		padding-left: 10px;
+		padding-right:10px;
+		border-style: solid;
+		border-width: 1px;
+		font-size:12px;
+	}
+
+
+	span#title{
+		font-size:30px;
+		vertical-align:center;
+
+	}
+
+	div#header{
+		text-align:center;
+		line-height:100px;
+	}

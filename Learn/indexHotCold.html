@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Network2Canvas - connecting library terms using shared attributes and visualizing them on a 2-D SVG Canvas." />
+	<meta name="keywords" content="Avi Ma'ayan maayan laboratory mount sinai school of medicine new york mssm network2canvas n2c network 2 canvas" />
+    <meta name="author" content="Christopher Tan" />
+	<title>Network2Canvas</title>
+
+	<link rel="stylesheet" type="text/css" href='visualizer5.css' />
+
+
+	<script type='text/javascript' src='d3.v2.min.js'></script>
+	<script type="text/javascript" src='html5slider.js'></script>
+	<script type='text/javascript' src='visHotCold.js'></script>
+</head>
+
+<body>
+	<div id="externalwrapper">
+		<div id="holdElements">
+		
+		
+			<div id="topbar">
+				<a class="linker" href="http://www.maayanlab.net/N2C/N2CvD2N"><span class= "linker" href ="http://www.maayanlab.net/N2C/N2CvD2N/">Drug-Drug Similarity Canvas</span></a>
+				<a class="linker" href="http://www.maayanlab.net/N2C/"><span class= "linker">Functional Association Gene Canvases</span></a>
+				<!--<a class="linker" href="http://www.maayanlab.net/N2C/Software/" ><span class= "linker">Software</span></a>
+				<a class="linker" href="http://www.maayanlab.net/N2C/Authors/"><span class= "linker">Authors</span></a>-->
+				<a class="linker" href="http://www.maayanlab.net/N2C/Learn/" style="color:#DD5500; font-weight:700;" style="font-weight:700"><span class="linker">Canvas Node-Learning Game</span></a>
+			</div>
+			
+			
+			<div id="header" style="font-size:20px; font-family:arial; font-weight:700">Network2Canvas: Network Visualization on a Canvas with Enrichment Analysis</div>
+			<div id="menu" class="outputMenu">
+					<span class="tab" id="outputTab1" onclick="displayOutput(1)">About</span>
+					<span class="tab" id="outputTab2" onclick="displayOutput(2)" style="font-weight:400; background-color: #CCC;">Analysis Output</span>
+			</div>
+
+			<div id="outputDisplay1">
+				<!--
+				<div id="nodeInformation">
+					<div class="displayTitle">Term Name:</div>
+					<div id="nodeName" style="padding-top:5px;padding-bottom:10px;"></div>
+				</div>
+				
+				<span id="additTitle" style="font-size:11px">Additional Information:</span>
+				<div id="infoContainer">
+					<div id="additionalInfo"></div>
+				</div>
+				<div style="position:absolute; top:525px; text-align:center; width:191px">
+				<input type="button" onClick="document.getElementById('genes').value = document.getElementById('additionalInfo').innerHTML.split(', ').join('\n'); document.getElementById('genes').onfocus=''" value="Add to Input List" />
+				</div>-->
+				
+				<div id="SD">
+						<p><b style="padding-right:10px"></b></p>
+						<p>This game is for learning the nodes on the canvas. After clicking the Random Patient button for a list of up-regulated genes and then Submit, the enriched terms are displayed on the canvas for you to memorize. Once you are ready, press Start Game to blank the canvas. The objective of the game is to pick the terms with the most significance as fast as possible without choosing the wrong terms.<br /><br />
+						<p><b style="padding-right:10px">Remember:</b>
+						
+					
+						<p><b style="padding-right:10px">1.</b> You get more points for choosing more significant terms early.</p>
+						<p><b style="padding-right:10px">2.</b> You lose points for clicking on the wrong nodes!</p>
+						<p><b style="padding-right:10px">3.</b> The game ends after picking 10 enriched terms or 100 wrong ones.
+					<br />
+
+				</div>
+			</div>
+		<div id="outputDisplay2" class="GSEA" style="display:none; border-bottom: 1px solid black;">
+			<div id="frozenTable" style="padding-bottom:10px;">
+				<table class="contain" style="position:absolute;top:20px;">
+				<th>Term</th>
+				<th>P-Value</th>
+			</table>
+			</div>
+			<div id="enrichmentResults" style="padding-top:10px; position:absolute; top:50px;"></div>
+		
+		</div>
+<!--
+			<div id="termPanel" style="position:absolute; top:250px; left:10px; border: 1px solid black;">
+				<form>
+					Find Elements of Term:<br/>
+					<textarea id="elementTerm" onfocus="clearTextArea(this.form.genes)" onBlur="getElements(this.form.elementTerm.value);">Insert Term</textarea>
+				</form>
+			</div>
+-->
+
+			<div id="sidePanel">
+				
+				<div id="menu">
+					<div style="position:absolute;left:206px;">
+					<span class="tab" id="tab1" onclick="displayTab(1)">Analysis</span>
+					</div>
+				</div>	
+			<br />
+			<br />
+			<div id="scoreboard" style="text-align:center; width:201px;"><span style="font-size:13px; font-weight:700">Scoreboard</span><br /><br /></div>
+			
+			<br />
+			<br />
+			<br />
+
+				<form id="form1"><br />
+
+					
+					Gene List:<br /><br />
+
+							<div class="center">
+								<textarea id="genes" onfocus="clearTextArea(this.form.genes)" name="genes">Enter list of gene names here</textarea>
+							</div>
+							<div class="center">
+								<input type ="button" name="button" id = "submitButton" value="Submit" selected="true" onClick="geneFill(G_VAR.nodes, this.form.genes.value, G_VAR.indicatorColor, G_VAR.infoDict, G_VAR.infos);"/>
+								<input type="button" name="button" id = "clearButton" value="Clear" onclick="indicateClear(G_VAR.nodes);"/><br />
+								<input type="button" name="button" value="Example" onclick="exampleRandom(G_VAR.infos, G_VAR.randomArray, 10);" />
+								<input type="button" name="button" id = "randButton" value="Random Patient" onclick="randomPatient();" />
+								
+							</div>
+
+				</form>
+
+				<br />
+				<br />
+
+				<div id="holdStartButton" style="text-align:center"></div>
+				
+				
+				</div> 
+
+
+			<div id="holdSVG">
+
+				<div id="svgWrapper">
+					<form id="selectSVG">
+
+						Canvas: <select id="selectCanvas" onChange="getGMT(this.form.selectCanvas.selectedIndex);getJSON(this.form.selectCanvas.selectedIndex, G_VAR.canvasRGB, G_VAR.indicatorColor);">
+							<option value="x">------Transcription------</option>
+							<option value="x"></option>
+							<option value="3">Chip-X Enrichment Analysis (ChEA)</option>
+							<option value="24">JASPAR + Transfac PWM</option>
+							<option value="17">UCSC GenomeBrowser PWM</option>
+							<option value="36">Histone Modifications ChIP-seq</option>
+							<option value="10">Target Scan - MicroRNAs</option>
+							<!--<option value="16">ENCODE Transcription Factors - ChIP-seq</option>-->
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Pathways------</option>
+							<option value="x"></option>
+							<option value="8">KEGG Pathways</option>
+							<option value="14">WikiPathways</option>
+							<option value="13">Reactome Pathways</option>
+							<option value="4">Biocarta Pathways</option>
+							<option value="23">PPI Hub Proteins</option>
+							<option value="1">Kinase Enrichment Analysis (KEA)</option>
+							<option value="27">Human Endogenous Complex</option>
+							<option value="34">CORUM</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Ontologies------</option>
+							<option value="x"></option>
+							<option value="5">Gene Ontology Biological Processes</option>
+							<option value="6">Gene Ontology Cellular Components</option>
+							<option value="7">Gene Ontology Molecular Function</option>
+							<option value="9">MGI - Mammalian Phenotype - Top 4</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Disease/Drugs------</option>
+							<option value="x"></option>
+							<option value="32">Up-Regulated CMAP Top 100</option>
+							<option value="33">Down-Regulated CMAP Top 100</option>
+							<option value="31">GeneSigDB</option>
+							<option value="11">OMIM Diseases</option>
+							<option value="22">OMIM Diseases Expanded</option>
+							<option value="25">VirusMINT - Virus-Host Interactions</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Cell Types------</option>
+							<option value="x"></option>
+							<option value="26">Human Gene Atlas</option>
+							<option value="28">Mouse Gene Atlas</option>
+							<option value="29">Cancer Cell Line Encyclopedia</option>
+							<option value="30">NCI-60 Cancer Cell Line</option>
+							<option value="x"></option>
+							<option value="x"></option>
+							<option value="x">------Misc------</option>
+							<option value="x"></option>
+							<option value="35">HMDB Metabolites</option>
+							<option value="12">PFAM Interpro - Protein Domains</option>
+
+						</select>
+									</form>
+						<form>
+						Patient ID: <select id="selectPatient" onChange="getPatient(this.form.selectPatient.selectedIndex);">
+						<option>Choose a Patient</option>
+						</select>
+						</form>
+		
+				<div id="timer" style="width:390px;height:36px"></div>
+				<div id="svgContainer"></div>
+				<div id="chartContainer"></div>
+				<div id="pvalueContainer"></div>
+
+				<form id="choiceView" style="padding-top:10px; display:none;">
+						<input type ="radio" id="mainCanvasSelector" name="a" checked="checked" onClick="selectAlternateView()">Main View</input>
+						<input type ="radio" id="networkView" name = "a" disabled="true" onClick="selectAlternateView()">Network View</input>
+						<input type ="radio" id="pvalueCanvas" name = "a" disabled="true" onClick="selectAlternateView()">P-Value View</input>
+				</form>
+
+				</div>
+
+
+				
+			</div>
+
+
+
+				<div id="manhattanElement">
+					<div id="selectionDisplay3">
+					</div>
+					
+
+					
+		
+					
+				</div>
+
+			</div>
+		</div>
+		
+		
+		<div id="footer">
+			(c) 2012 <a href="http://www.mssm.edu/labs/maayan">Ma'ayan Laboratory</a> - <a href="http://www.mssm.edu">Mount Sinai School of Medicine</a>
+		</div>
+	
+
+
+</body>
+
+
+<script type="text/javascript">
+	document.getElementById("randButton").disabled = true;
+	colorWheel(10, "div#wheelContain", "G_VAR.canvasRGB", [0, 255, 255]);
+	colorWheel(10, "div#hexcode_gene", "G_VAR.indicatorColor", [255, 255, 255]);
+	document.getElementById("selectCanvas").selectedIndex = 44;
+	getGMT(44);
+	getJSON(44, [255, 0, 0], [255, 255, 255]);
+	loadPatients();
+	getScoreBoard();
+
+	storeFact = [0,0];
+
+
+/*
+	d3.select("#holdSVG").append("div")
+			.attr("id","infoReminder")
+			.style("width", "390px").style("padding-top", "15px")
+			.text("Click a spot on the canvas to view more information about the term.");
+
+*/
+</script>
+
+</html>

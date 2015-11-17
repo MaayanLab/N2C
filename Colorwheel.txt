@@ -1,0 +1,83 @@
+//--------------------------
+	// Bright Color Wheel
+	//--------------------------
+
+	function colorWheel(pixels, target, modify, startColor){
+		// Generates the bright color wheel as darker colors are not that useful
+		// on the canvas. 
+		var sqrt3 = Math.sqrt(3);
+		
+		var rows = [
+			[[0, 255, 255], [51, 204, 255], [51, 153, 255], [102, 153, 255]],
+			[[102, 255, 204], [102, 255, 255], [102, 204, 255], [153, 204, 255], [153, 153, 255]],
+			[[102, 255, 153], [153, 255, 204], [204, 255, 255], [204, 204, 255], [204, 153, 255], [204, 102, 255]],
+			[[102, 255, 102], [153, 255, 153], [204, 255, 204], [255, 255, 255], [255, 204, 255], [255, 153, 255], [255, 102, 255]],
+			[[153, 255, 102], [204, 255, 153], [255, 255, 204], [255, 204, 204], [255, 153, 204], [255, 102, 204]],
+			[[204, 255, 102], [255, 255, 153], [255, 204, 153], [255, 153, 153], [255, 102, 153]],
+			[[255, 255, 102], [255, 204, 102], [255, 153, 102], [255, 102, 102]]
+			]
+		var svg = d3.select(target).append("svg:svg").attr("height", 7 * pixels * sqrt3).attr("width", 7 * pixels * sqrt3);
+		var mid = Math.floor(rows.length/2);
+
+		for (var r = 0; r < rows.length; r++){
+			var shift = Math.abs(mid - r);
+			for (var hex = 0; hex < rows[r].length; hex++){
+				var columnOrigin = sqrt3 * shift / 2 * pixels + hex * sqrt3 * pixels
+				var rowOrigin = pixels / 2 + ((r+1) * 1.5 * pixels);
+				var up = pixels/2;
+				var right = sqrt3*pixels/2;
+				var path = ["M", columnOrigin, rowOrigin, 
+							"l", right, up, 
+							"l",  right, -up, 
+							"l", 0, -pixels,  
+							"l", -right, -up,  
+							"l", -right, up, "Z"].join(" ");
+
+				aPath = svg.append("svg:path").attr("d", path)
+					.attr("modify", modify)
+					.attr("target", target)
+					.attr("value", rows[r][hex])
+					.style("fill", ["rgb(", rows[r][hex].join(","), ")"].join(""))
+					.on("click", colorCanvas);
+					
+				if (rows[r][hex].join(",") === startColor.join(",")){
+			
+					aPath.attr("stroke-width", 2)
+						 .attr("stroke", "black");
+				}
+			}
+		}
+	}
+	
+
+	function colorCanvas(){
+		// Colors the canvas depending on what was selected on the color wheel.
+		// Note that FireFox treats color information in the form of RGB(r,g,b),
+		// not by hexcode.
+
+		d3.select(this.getAttribute("target")).selectAll("path").style("stroke", "none");
+		console.log(this.style.fill);
+		this.style.stroke = "#666"
+		this.style.strokeWidth = 2;
+
+		canvasRGB = this.getAttribute("value").split(",");
+
+	
+
+		if (this.getAttribute("modify") === "G_VAR.canvasRGB"){
+
+			G_VAR.canvasRGB = canvasRGB;
+
+				for (var i = 0; i < G_VAR.nodes.length; i++){
+					G_VAR.nodes[i].colorizer(G_VAR.scale, canvasRGB);
+				}
+				canvas.selectAll("rect").remove();
+				canvas.selectAll("circle").remove();
+				rectMake(G_VAR.nodes, G_VAR.canvasSize / Math.sqrt(G_VAR.nodes.length));
+				circleMake(G_VAR.nodes, G_VAR.canvasSize / Math.sqrt(G_VAR.nodes.length));
+		} else if (this.getAttribute("modify") === "G_VAR.indicatorColor"){
+			G_VAR.indicatorColor = canvasRGB;
+
+		}
+
+	}

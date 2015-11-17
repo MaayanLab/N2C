@@ -1,0 +1,45 @@
+J01 Cluster
+
+Cefonicid
+Cefoperazone
+Sulfmethizole
+Azidocillin
+Mezlocillin
+Cefotiam
+Latamoxef
+Ceforanide
+Cefpiramide
+Cefotetan
+Cefmetazole
+Ceftizoxime
+Dicloxacillin
+Cephalexin
+Azlocillin
+Carbenicillin
+Piperacillin
+Ceftibuten
+Oxacillin
+Hetacillin
+Cefaclor
+Ertapenem
+
+
+N03 Cluster
+
+Methylphenobarbital
+Oxcarbazepine
+Methsuximide
+Mephenytoin
+Metharbital
+Phensuximide
+Levetiracetam
+
+Toll Like Receptor (SIDER)
+
+Pimozide
+Loxapine
+Topiramate
+Clomipramine
+Gefitinib
+Promethazine
+Methocarbamol
